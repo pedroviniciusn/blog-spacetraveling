@@ -1,0 +1,27 @@
+.container {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.containerContent {
+    padding: 0 0 3rem;
+    :nth-child(-n + 2) {
+        padding: 0 0 1rem;
+    } 
+}
+
+.textInfo {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0 0;
+    
+    span {
+        display: flex;
+        align-items: center;
+    }
+
+    :nth-child(-n + 2) {
+        margin: 0 .8rem 0 0;
+        padding: 0 0;
+    } 
+}

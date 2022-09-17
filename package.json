@@ -3,11 +3,24 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "slicemachine": "start-slicemachine"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "@prismicio/client": "^6.7.1",
+    "@prismicio/helpers": "^2.3.4",
+    "@prismicio/next": "^0.1.5",
+    "@prismicio/react": "^2.5.0",
+    "@prismicio/slice-simulator-react": "^0.2.2",
+    "@types/react": "^18.0.20",
+    "next": "^12.3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
+    "sass": "^1.54.9"
+  },
+  "devDependencies": {
+    "slice-machine-ui": "^0.4.2",
+    "typescript": "^4.8.3"
   }
 }
