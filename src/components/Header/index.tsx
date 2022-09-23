@@ -1,12 +1,12 @@
-import ActiveLink  from '../ActiveLink'
+import Link from 'next/link';
 import styles from './header.module.scss'
 
 function Header() {
     return (
       <header className={styles.headerContent}>
-        <ActiveLink href='/'>
+        <Link href='/'>
           <img src='/images/Logo.png' alt="logo" />
-        </ActiveLink>
+        </Link>
       </header>
     )
   }

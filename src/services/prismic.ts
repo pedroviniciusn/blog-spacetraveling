@@ -8,6 +8,22 @@ import sm from '../../sm.json'
  */
 export const repositoryName = prismic.getRepositoryName(sm.apiEndpoint)
 
+/**
+ * The project's Prismic Link Resolver. This function determines the URL for a given Prismic document.
+ *
+ * @type {prismicH.LinkResolverFunction}
+ */
+// Update the Link Resolver to match your project's route structure
+export function linkResolver(doc) {
+  switch (doc.type) {
+    case 'postsblog':
+      return `/${doc.uid}`
+    default:
+      return null
+  }
+}
+
+
 
 /**
  * Creates a Prismic client for the project's repository. The client is used to

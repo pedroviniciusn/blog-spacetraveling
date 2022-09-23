@@ -7,6 +7,7 @@ import { FiCalendar, FiUser } from "react-icons/fi";
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import Link from 'next/link';
 
 
 interface Post {
@@ -30,9 +31,6 @@ interface HomeProps {
 
 export default function Home({page}) {
 
-  console.log(page)
-  console.log(page[0].data)
-
   return (
     <>
       <Head>
@@ -42,10 +40,12 @@ export default function Home({page}) {
 
       <main className={styles.container}>
         {
-          page.map((post, index) => {
+          page.map((post) => {
             return (
-              <div className={styles.containerContent}>
-                <h1>{post.data.title}</h1>
+              <div key={post.id} className={styles.containerContent}>
+                <Link href={`/posts/${post.slug}`}>
+                  <h1>{post.data.title}</h1>
+                </Link>
                 <span>
                   Pensando em sincronização em vez de ciclos de vida.
                 </span>
@@ -76,6 +76,7 @@ export async function getStaticProps({ params, previewData }) {
   }
 
   return {
-    props: { page }, // Will be passed to the page component as props
+    props: { page },
+    revalidate: 60 * 60 * 24 , // Will be passed to the page component as props
   }
 }

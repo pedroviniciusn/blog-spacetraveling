@@ -5,6 +5,11 @@
 
 .containerContent {
     padding: 0 0 3rem;
+
+    h1 {
+        cursor: pointer;
+    }
+    
     :nth-child(-n + 2) {
         padding: 0 0 1rem;
     } 
