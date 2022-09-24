@@ -1,16 +1,18 @@
 import { GetStaticProps } from 'next';
-import  {createClient}  from '../services/prismic'
-
 import Head from 'next/head';
+import Link from 'next/link';
+import {format} from 'date-fns'
+
+import  {createClient}  from '../services/prismic'
+import ptBR from 'date-fns/locale/pt-BR'
 
 import { FiCalendar, FiUser } from "react-icons/fi";
-
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
-import Link from 'next/link';
 
 
 interface Post {
+  id?: string;
   uid?: string;
   first_publication_date: string | null;
   data: {
@@ -29,7 +31,7 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home({page}) {
+export default function Home({posts}) {
 
   return (
     <>
@@ -37,21 +39,34 @@ export default function Home({page}) {
         <title>spacetraveling</title>
       </Head>
 
-
       <main className={styles.container}>
         {
-          page.map((post) => {
+          posts.map((post: Post) => {
             return (
               <div key={post.id} className={styles.containerContent}>
-                <Link href={`/posts/${post.slug}`}>
+                <Link href={`/posts/${post.uid}`}>
                   <h1>{post.data.title}</h1>
                 </Link>
                 <span>
-                  Pensando em sincronização em vez de ciclos de vida.
+                  {post.data.subtitle}
                 </span>
                 <div className={styles.textInfo}>
-                    <span><FiCalendar/> 19 Abr 2021</span>
-                    <span><FiUser/>{post.data.author}</span>
+                    <span>
+                      <FiCalendar/>
+                          {
+                            format(
+                              new Date(post.first_publication_date),
+                              "dd MMM YYY",
+                              {
+                                locale: ptBR,
+                              }
+                            )
+                          }
+                    </span>
+                    <span>
+                      <FiUser/>
+                      {post.data.author}
+                    </span>
                 </div>
               </div>    
             )
@@ -63,20 +78,13 @@ export default function Home({page}) {
  }
 
 
-export async function getStaticProps({ params, previewData }) {
-  const slug = params
+export async function getStaticProps({ previewData }) {
   const client = createClient({ previewData })
 
-  const page = await client.getAllByType('postsblog')
-
-  const post = {
-    slug,
-   //title: page.data.title.find((title: any) => title.type === 'heading1')?.text,
-
-  }
+  const posts = await client.getAllByType('postsblog')
 
   return {
-    props: { page },
+    props: {posts},
     revalidate: 60 * 60 * 24 , // Will be passed to the page component as props
   }
 }
