@@ -1,4 +1,4 @@
-import { PrismicRichText } from '@prismicio/react';
+import { RichText } from 'prismic-dom';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
@@ -29,43 +29,39 @@ interface PostProps {
   post: Post;
 }
 
-export default function Post({posts}) {
-  
-  return (
+export default function Post({posts}) { 
+  return ( 
     <>
-    <div>
-      
-    </div>  
-    
+      <img src={posts.banner}/>
+      <div className={styles.postContent} dangerouslySetInnerHTML={{__html: posts.content}}/>
     </>
   )
 }
+  
 
 export const getServerSideProps = async ({params, previewData }) => {
   const slug = params.uid
-  const prismic = createClient({ previewData });
-  const response = await prismic.getAllByType('postsblog', slug);
-
-  const posts = response.map((post: any) => {
-    return {
-      slug,
-      title: post.data.title,
-      content: post.data.content,
-      updatedAt: format(
-        new Date(post.first_publication_date),
-          "dd MMM YYY",
-          {
-            locale: ptBR,
-          }
-      ),
-    }
-  })
-
-  console.log(posts)
+  const client = createClient({ previewData });
+  const page = await client.getByUID('postsblog', slug);
+  
+  const posts = {
+    slug,
+    title: page.data.title,
+    banner: page.data.banner.url,
+    content: RichText.asHtml(page.data.content[0].body),
+    updatedAt: format(
+      new Date(page.first_publication_date),
+        "dd MMM YYY",
+        {
+          locale: ptBR,
+        }
+    ),
+  }
+  
    
   return {
     props: {
-      posts,
+      posts
     }
   }
 
