@@ -44,7 +44,7 @@ export default function Home({posts}) {
           posts.map((post: Post) => {
             return (
               <div key={post.id} className={styles.containerContent}>
-                <Link href={`/posts/${post.uid}`}>
+                <Link href={`/post/${post.uid}`}>
                   <h1>{post.data.title}</h1>
                 </Link>
                 <span>
