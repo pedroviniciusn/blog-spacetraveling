@@ -20,7 +20,7 @@
 .textInfo { 
     display: flex;
     align-items: center;
-    padding: 0 0 2rem;
+    padding: 0 0 3rem;
 
     span {
         display: flex;
@@ -31,4 +31,10 @@
         margin: 0 .8rem 0 0;
         padding: 0 0;
     } 
+}
+
+.main {
+    h2 {
+        padding: 0 0 2rem;
+    }
 }

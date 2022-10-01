@@ -33,10 +33,11 @@ export default function Post({post}) {
               <FiUser/>
               {post.author}
             </span>
-          </div>
-
-
-        <div className={styles.postContent} dangerouslySetInnerHTML={{__html: post.content}}/>
+          </div> 
+          <main className={styles.main}>
+            <h2>{post.heading}</h2>
+            <div className={styles.postContent} dangerouslySetInnerHTML={{__html: post.content}}/>
+          </main>
         </div>
 
       </section>
@@ -56,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = async ({params, previewDat
     title: page.data.title,
     author: page.data.author,
     banner: page.data.banner.url,
+    heading: page.data.content[0].heading,
     content: RichText.asHtml(page.data.content[0].body),
     updatedAt: format(
       new Date(page.first_publication_date),
@@ -64,9 +66,16 @@ export const getServerSideProps: GetServerSideProps = async ({params, previewDat
           locale: ptBR,
         }
     ),
+    time: page.data.content[0].body.reduce(function (numberOfWords, word) {
+      for(word in numberOfWords) {
+        numberOfWords[word]
+      }
+      return numberOfWords.length
+    })
   }
-  
-   
+
+  console.log(post)
+     
   return {
     props: {
       post
@@ -75,3 +84,4 @@ export const getServerSideProps: GetServerSideProps = async ({params, previewDat
 
    
 };
+ 
