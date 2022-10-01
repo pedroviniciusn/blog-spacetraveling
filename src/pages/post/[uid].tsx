@@ -70,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async ({params, previewDat
       for(word in numberOfWords) {
         numberOfWords[word]
       }
-      return numberOfWords.length
+      return numberOfWords
     })
   }
 
