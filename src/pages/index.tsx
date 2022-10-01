@@ -83,6 +83,7 @@ export async function getStaticProps({ previewData }) {
 
   const posts = await client.getAllByType('postsblog')
 
+  
   return {
     props: {posts},
     revalidate: 60 * 60 * 24 , // Will be passed to the page component as props

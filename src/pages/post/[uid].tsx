@@ -3,50 +3,58 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
 
+import { FiCalendar, FiUser } from "react-icons/fi";
+
 import { createClient } from '../../services/prismic';
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
+import Head from 'next/head';
 
-interface Post {
-  first_publication_date: string | null;
-  data: {
-    title: string;
-    banner: {
-      url: string;
-    };
-    author: string;
-    content: {
-      heading: string;
-      body: {
-        text: string;
-      }[];
-    }[];
-  };
-}
 
-interface PostProps {
-  post: Post;
-}
 
-export default function Post({posts}) { 
+export default function Post({post}) { 
   return ( 
     <>
-      <img src={posts.banner}/>
-      <div className={styles.postContent} dangerouslySetInnerHTML={{__html: posts.content}}/>
+      <Head>
+        <title>{post.slug}</title>
+      </Head>
+
+      <section className={styles.container}>
+        <img src={post.banner} alt='banner'/>
+        <div className={styles.content}>
+          <h1>{post.title}</h1>
+          <div className={styles.textInfo}>
+            <span>
+              <FiCalendar/>
+              {post.updatedAt}
+            </span>
+            <span>
+              <FiUser/>
+              {post.author}
+            </span>
+          </div>
+
+
+        <div className={styles.postContent} dangerouslySetInnerHTML={{__html: post.content}}/>
+        </div>
+
+      </section>
     </>
   )
 }
   
 
-export const getServerSideProps = async ({params, previewData }) => {
+export const getServerSideProps: GetServerSideProps = async ({params, previewData }) => {
   const slug = params.uid
   const client = createClient({ previewData });
-  const page = await client.getByUID('postsblog', slug);
+  const page = await client.getByUID('postsblog', String(slug));
+
   
-  const posts = {
+  const post = {
     slug,
     title: page.data.title,
+    author: page.data.author,
     banner: page.data.banner.url,
     content: RichText.asHtml(page.data.content[0].body),
     updatedAt: format(
@@ -61,7 +69,7 @@ export const getServerSideProps = async ({params, previewData }) => {
    
   return {
     props: {
-      posts
+      post
     }
   }
 
