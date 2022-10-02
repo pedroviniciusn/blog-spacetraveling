@@ -4,6 +4,7 @@ import { ptBR } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
 
 import { FiCalendar, FiUser } from "react-icons/fi";
+import { BiTimeFive } from 'react-icons/bi'
 
 import { createClient } from '../../services/prismic';
 
@@ -13,7 +14,7 @@ import Head from 'next/head';
 
 
 
-export default function Post({post}) { 
+export default function Post({post, timeContent}) { 
   return ( 
     <>
       <Head>
@@ -33,6 +34,10 @@ export default function Post({post}) {
               <FiUser/>
               {post.author}
             </span>
+            <span>
+              <BiTimeFive/>
+              {timeContent} {timeContent === 1 ? 'minuto' : 'minutos'}
+            </span>
           </div> 
           <main className={styles.main}>
             <h2>{post.heading}</h2>
@@ -49,7 +54,7 @@ export default function Post({post}) {
 export const getServerSideProps: GetServerSideProps = async ({params, previewData }) => {
   const slug = params.uid
   const client = createClient({ previewData });
-  const page = await client.getByUID('postsblog', String(slug));
+  const page =await client.getByUID('postsblog', String(slug));
 
   
   const post = {
@@ -66,22 +71,27 @@ export const getServerSideProps: GetServerSideProps = async ({params, previewDat
           locale: ptBR,
         }
     ),
-    time: page.data.content[0].body.reduce(function (numberOfWords, word) {
+    timeContent: page.data.content.reduce(function(numberOfWords, word) {
       for(word in numberOfWords) {
         numberOfWords[word]
       }
-      return numberOfWords
-    })
+      
+      return numberOfWords 
+    }),    
   }
 
-  console.log(post)
-     
+  const content = RichText.asHtml(post.timeContent.body).split(' ')
+
+  const time = content.length / 200*60
+
+  const timeContent = Math.round((time%3600)/60)
+  
   return {
     props: {
-      post
+      post,
+      timeContent
     }
   }
 
    
 };
- 
