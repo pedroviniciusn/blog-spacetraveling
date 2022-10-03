@@ -36,7 +36,7 @@ export default function Post({post, timeContent}) {
             </span>
             <span>
               <BiTimeFive/>
-              {timeContent} {timeContent === 1 ? 'minuto' : 'minutos'}
+              {timeContent == 1 ? `${timeContent} minuto` : timeContent > 1 ? `${timeContent} minutos`: `${timeContent} minutos`}
             </span>
           </div> 
           <main className={styles.main}>
