@@ -7,6 +7,8 @@ import { FiCalendar, FiUser } from "react-icons/fi";
 import { BiTimeFive } from 'react-icons/bi'
 
 import { createClient } from '../../services/prismic';
+import { PrismicRichText } from "@prismicio/react"
+import * as prismicH from '@prismicio/helpers'
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
@@ -40,30 +42,41 @@ export default function Post({post, timeContent}) {
             </span>
           </div> 
           <main className={styles.main}>
-            <h2>{post.heading}</h2>
-            <div className={styles.postContent} dangerouslySetInnerHTML={{__html: post.content}}/>
+            {
+              post.content.map((item) => {
+                return ( 
+                  <div>   
+                    <h2>{item.heading}</h2>
+                    <PrismicRichText
+                    field={item.body}
+                    fallback={<p>No content</p>}
+                    />     
+                  </div>
+                )
+              })
+            }     
           </main>
         </div>
-
       </section>
     </>
   )
 }
+
   
 
-export const getServerSideProps: GetServerSideProps = async ({params, previewData }) => {
+export async function getServerSideProps({params, previewData}) {
   const slug = params.uid
   const client = createClient({ previewData });
-  const page =await client.getByUID('postsblog', String(slug));
-
+  const page = await client.getByUID('postsblog', String(slug));
   
   const post = {
     slug,
     title: page.data.title,
     author: page.data.author,
     banner: page.data.banner.url,
-    heading: page.data.content[0].heading,
-    content: RichText.asHtml(page.data.content[0].body),
+    content: page.data.content.map((item) => {
+      return item
+    }) ,
     updatedAt: format(
       new Date(page.first_publication_date),
         "dd MMM YYY",
@@ -79,7 +92,7 @@ export const getServerSideProps: GetServerSideProps = async ({params, previewDat
       return numberOfWords 
     }),    
   }
-
+  
   const content = RichText.asHtml(post.timeContent.body).split(' ')
 
   const time = content.length / 200*60
@@ -89,9 +102,8 @@ export const getServerSideProps: GetServerSideProps = async ({params, previewDat
   return {
     props: {
       post,
-      timeContent
+      timeContent,   
     }
   }
-
    
 };
