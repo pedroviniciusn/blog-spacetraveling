@@ -8,7 +8,6 @@ import { BiTimeFive } from 'react-icons/bi'
 
 import { createClient } from '../../services/prismic';
 import { PrismicRichText } from "@prismicio/react"
-import * as prismicH from '@prismicio/helpers'
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
@@ -43,9 +42,9 @@ export default function Post({post, timeContent}) {
           </div> 
           <main className={styles.main}>
             {
-              post.content.map((item) => {
+              post.content.map((item, index) => {
                 return ( 
-                  <div>   
+                  <div key={index} className={styles.paragraph}>   
                     <h2>{item.heading}</h2>
                     <PrismicRichText
                     field={item.body}
@@ -83,21 +82,21 @@ export async function getServerSideProps({params, previewData}) {
         {
           locale: ptBR,
         }
-    ),
-    timeContent: page.data.content.reduce(function(numberOfWords, word) {
-      for(word in numberOfWords) {
-        numberOfWords[word]
-      }
-      
-      return numberOfWords 
-    }),    
+    ),   
   }
+
+  const content = post.content.map(item => {
+    return item.body
+  })
+
+  const allContent = Object.assign(content.map(item => JSON.stringify(item)))
   
-  const content = RichText.asHtml(post.timeContent.body).split(' ')
-
-  const time = content.length / 200*60
-
+  const contentArray = JSON.stringify(allContent).split(/[.\s]+/)
+  
+  const time = (contentArray.length*60) / 200
+  
   const timeContent = Math.round((time%3600)/60)
+
   
   return {
     props: {
@@ -106,4 +105,4 @@ export async function getServerSideProps({params, previewData}) {
     }
   }
    
-};
+}; 
