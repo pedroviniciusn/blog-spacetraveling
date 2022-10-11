@@ -18,6 +18,9 @@ Essa será uma aplicação onde o seu principal objetivo é criar um blog do 
 - Requisições HTTP com `fetch`;
 - Entre outros.
 
+![pageHomeBlog](https://user-images.githubusercontent.com/91329679/195204778-5caa16c7-5e18-490a-b360-a422bb8351a1.png)
+![pagePostBlog](https://user-images.githubusercontent.com/91329679/195204803-ca645f39-df42-47ff-9fd0-7b66de3d34b4.png)
+
 ## **Technologies**
 
 - NextJS
