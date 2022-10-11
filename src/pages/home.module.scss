@@ -31,3 +31,20 @@
     } 
 }
 
+.buttonActive {
+    border: none;
+    background: none;
+    
+    cursor: pointer;
+    
+    a {
+        font-size: 1.2rem;
+        color: var(--Highlight);
+
+        text-decoration: none;
+    }
+}
+
+.buttonHidden {
+    display: none;
+}

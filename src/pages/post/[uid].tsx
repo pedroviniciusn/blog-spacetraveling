@@ -1,24 +1,38 @@
-import { RichText } from 'prismic-dom';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
-import { GetServerSideProps } from 'next';
+import { PrismicRichText } from "@prismicio/react"
+import { createClient } from '../../services/prismic';
+
+import Head from 'next/head';
 
 import { FiCalendar, FiUser } from "react-icons/fi";
 import { BiTimeFive } from 'react-icons/bi'
 
-import { createClient } from '../../services/prismic';
-import { PrismicRichText } from "@prismicio/react"
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
-import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
-import Head from 'next/head';
 
+interface PostProps {
+  slug: string;
+  title: string;
+  author: string;
+  banner: string;
+  content: {
+    map(arg0: (item: any, index: any) => JSX.Element): import("react").ReactNode;
+    heading: string;
+    body: HTMLElement;
+  }
+  updatedAt: string; 
+}
 
+interface Props {
+  post: PostProps;
+  timeContent: number;
+}
 
-export default function Post({post, timeContent}) { 
+export default function Post({post, timeContent}: Props) { 
   return ( 
     <>
-      <Head>
+      <Head>timeContentProps
         <title>{post.slug}</title>
       </Head>
 
@@ -75,7 +89,7 @@ export async function getServerSideProps({params, previewData}) {
     banner: page.data.banner.url,
     content: page.data.content.map((item) => {
       return item
-    }) ,
+    }),
     updatedAt: format(
       new Date(page.first_publication_date),
         "dd MMM YYY",
