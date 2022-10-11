@@ -27,13 +27,13 @@ interface NextPageProps {
 }
 
 export default function Home({posts}) {
-    const [nextPage, setNextPage] = useState<NextPageProps>({nextPage: ''})   
+  const [nextPage, setNextPage] = useState<NextPageProps>({nextPage: ''})   
 
-    useEffect(() => {
-      fetch(posts[0].href)
-        .then(response => response.json())
-        .then((data => setNextPage(data.next_page))) 
-      },[])
+  useEffect(() => {
+    fetch(posts[0].href)
+      .then(response => response.json())
+      .then((data => setNextPage(data.next_page))) 
+    },[])
       
   return (
     <>
