@@ -26,4 +26,4 @@ Essa será uma aplicação onde o seu principal objetivo é criar um blog do 
 - NextJS
 - TypeScript
 - Prismicio
-- Sass
+- SASS
